@@ -43,15 +43,15 @@ $router->get('/',[
 ]);
 
 // route pour le quiz et ses réponses
-$router->get('/quiz/',[
+$router->get('/quiz/{id}',[
     'as' => 'quiz', // as permet de définir le nom de ma route
     'uses' => 'QuizController@quiz' // uses permet de donner le chemin (ici MonController@MaMethode)
 ]);
 
-// route pour le quiz et ses réponses
+/* // route pour le quiz et ses réponses
 $router->post('/quiz/',[
     'as' => 'quiz', // as permet de définir le nom de ma route
     'uses' => 'QuizController@quizPost' // uses permet de donner le chemin (ici MonController@MaMethode)
-]);
+]); */
 
 

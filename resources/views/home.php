@@ -14,7 +14,7 @@
                 <?php foreach($quizzes as $quiz): ?>
 
                     <div class="col-sm-4">
-                    <a href="<?= route('quiz') ?>"><h3 class="text-blue"><?= $quiz->title ?></h3></a>
+                    <a href="<?= route('quiz', ['id' => $quiz->id]) ?>"><h3 class="text-blue"><?= $quiz->title ?></h3></a>
                     <h5><?= $quiz->description ?></h5>
                     <p>by author name</p>
                     </div>

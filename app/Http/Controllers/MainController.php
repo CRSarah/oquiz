@@ -14,12 +14,9 @@ class MainController extends Controller
     }
 
     public function home(/*Request $request*/){
-        $quizzes = Quizzes::all(); // 1ère manière (best)
+        $quizzes = Quizzes::all();
         //dump($quizzes);
-        //$titles = DB::select("SELECT title FROM quizzes"); // 2ème manière
-        //dump($titles);
         return view('home', [
-            //'titles' => $titles,
             'quizzes' => $quizzes
         ]);
     }

@@ -1,14 +1,14 @@
 <?= view('layout/header')?>
 
             <div class="row">
-                <h2> Le chocolat - I
+                 <h2> <?= $quiz[$id]->title ?> <!-- Ici, tu vas aller chercher le titre du quiz qui correspond à l'id que tu as passé en paramètres :)  -->
                     <span class="badge badge-pill badge-secondary">xx questions</span>
                 </h2>
             </div>
 
             <div class="row">
                 <h4> 
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr.
+                    <?= $quiz[$id]->description ?><!-- Ici, tu vas aller chercher le soustitre du quiz qui correspond à l'id que tu as passé en paramètres :)  -->
                 </h4>
             </div>
 
