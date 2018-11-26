@@ -36,22 +36,53 @@ $router->get('/', function () use ($router) {
 
 // une route dans les regle de l'art : url + controller et associé a un nom
 
-// route pour la home
 $router->get('/',[
-    'as' => 'home', // as permet de définir le nom de ma route
-    'uses' => 'MainController@home' // uses permet de donner le chemin (ici MonController@MaMethode)
+    'as' => 'quiz_list',
+    'uses' => 'QuizController@list'
 ]);
 
-// route pour le quiz et ses réponses
-$router->get('/quiz/{id}',[
-    'as' => 'quiz', // as permet de définir le nom de ma route
-    'uses' => 'QuizController@quiz' // uses permet de donner le chemin (ici MonController@MaMethode)
+$router->get('quiz/{id}',[
+    'as' => 'quiz_show',
+    'uses' => 'QuizController@show'
 ]);
 
-/* // route pour le quiz et ses réponses
-$router->post('/quiz/',[
-    'as' => 'quiz', // as permet de définir le nom de ma route
-    'uses' => 'QuizController@quizPost' // uses permet de donner le chemin (ici MonController@MaMethode)
-]); */
+$router->get('signup', [
+    'as' => 'user_signup', 
+    'uses' => 'UserController@signup'
+]);
 
+$router->post('signup', [
+    'as' => 'user_signup', 
+    'uses' => 'UserController@signup'
+]);
+
+$router->get('signin', [
+    'as' => 'user_signin', 
+    'uses' => 'UserController@signin'
+]);
+
+$router->post('signin', [
+    'as' => 'user_signin', 
+    'uses' => 'UserController@signin'
+]);
+
+$router->get('account', [
+    'as' => 'user_profile', 
+    'uses' => 'UserController@profile'
+]);
+
+$router->get('logout', [
+    'as' => 'quiz_logout', 
+    'uses' => 'UserController@logout'
+]);
+
+$router->get('quiz/tag/{tagId:[i]}', [
+    'as' => 'quiz_listByTag', 
+    'uses' => 'QuizController@listByTag'
+]);
+
+$router->get('tag', [
+    'as' => 'tag_list', 
+    'uses' => 'TagController@list'
+]);
 

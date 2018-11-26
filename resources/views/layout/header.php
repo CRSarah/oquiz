@@ -30,7 +30,7 @@
 
                 <ul class="nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link d-inline text-blue" href="#">
+                        <a class="nav-link d-inline text-blue" href="<?= route('quiz_list') ?>">
                         <h1 >O'Quiz</h1>
                         </a>
                     </li>
@@ -38,25 +38,40 @@
 
                 <ul class="nav nav-pills justify-content-end">
                     <li class="nav-item">
-                        <a class="nav-link active" href="<?= route('home') ?>">
+                        <a class="nav-link active" href="<?= route('quiz_list') ?>">
                             <i class="fas fa-home"></i>
                             Accueil
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link text-blue" href="#">
-                            <i class="fas fa-user"></i>
-                            Mon compte
-                        </a>
+                        <?php if($isConnected):?>
+                            <a class="nav-link text-blue" href="<?= route('user_profile'); ?>">
+                                <i class="fas fa-user"></i>
+                                Mon compte
+                            </a>
+                        <?php endif;?>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link text-blue" href="#">
+                        <?php if($isConnected):?>   
+                            <a class="nav-link text-blue" href="<?= route("quiz_logout"); ?>">
                             <i class="fas fa-sign-out-alt"></i>
                             Déconnexion
+                            </a>
+                        <?php else:?>
+                        <a class="nav-link text-blue" href="<?= route('user_signin'); ?>">
+                            <i class="fas fa-user"></i>
+                            Connexion
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-blue" href="<?= route('user_signup'); ?>">
+                            <i class="fas fa-user-plus"></i>
+                            Inscription
+                        </a>
+                    </li>
+                    <?php endif;?>
 
                 </ul>
             </nav>

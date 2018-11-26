@@ -2,54 +2,116 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
-use App\Questions;
-use App\Quizzes;
-/* use App\;
-use App\; */
+
+use App\Quiz;
+use App\User;
+use App\Level;
+use App\Question;
+use App\Answer;
+/* use Illuminate\Http\Request; */
 
 class QuizController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-    public function quiz($id){
-        //dump($id);
-        
-        // ? Ici, grâce à la table définie dans les models, je récupère tooooutes les infos de la table, en vrac et dans un immeeeeeeeense tableau indexé ou c'est le bordel (sinon c'est pas drole)
-        $quizzes = Quizzes::all(); // je récupère tous les éléments de ma table
+    public function list(/*Request $request*/){
+        $quizzes = Quiz::all();
         //dump($quizzes);
-        // ? Ici, je définis à vide  un tableau dans lequel je vais venir stocker mes infos de façon ordonnée
-        $quizzesById = [];
+        $users = User::all();
+        $userList = [];
 
-        // ? Ici, je fais une boucle pour en gros restructurer mon tableau en plein de petits objets
-        foreach($quizzes as $quiz) {
-            // dump($quiz); exit;
-            $quizzesById[$quiz->id] = $quiz; 
+        foreach($users as $user){
+        $userList[$user->id] = $user->firstname . ' ' . $user->lastname;
         }
 
-        
-        $questions = Questions::all();
-        //dump($questions);
-
-        return view('quiz', [
-            'id' => $id,
-            'quiz' => $quizzesById, // ? Ici je renvois qui contient tous les id
-            'questions' => $questions
+        return view('quiz.list', [
+            'quizzes' => $quizzes,
+            'userList' => $userList
         ]);
     }
 
-/*     public function quizPost(){
-        $questions = Questions::all();
-        dump($questions);
-        return view('quizPost', [
-            'questions' => $questions
+    public function show($id){
+        //dump($id);
+        
+        // QUIZ 6.2.3 - recuperation du quizz
+        $currentQuiz = Quiz::findOrFail($id);
+
+        // QUIZ 6.2.4 - recuperation des questions associées au quiz
+
+        // alternative RAW $users = DB::select('select * from app_user where id_quizz = ?', [$currentQuiz->id]);
+        // where = contrainte, get = recupere les resultats
+        $questions = Question::where('quizzes_id', '=', $currentQuiz->id)->get();
+
+        // QUIZZ 6.2.7 - affichage des réponses sans random 
+
+        /*
+
+        foreach($questions as $question){
+            $answers = Answer::where('questions_id', '=', $question->id)->get();
+
+            $questionAnswerList[$question->id]= $answers;            
+        }
+        
+        */
+
+        // QUIZZ 6.2.8 - Rendre aleatoire l'affichage des réponses
+        $questionAnswerList = $this->getRandomizedAnswers($questions);
+
+        // QUIZZ 6.2.6 - Recupérer l'auteur
+        $author = User::find($currentQuiz->app_users_id);
+        
+        // QUIZZ 6.2.9 - Recupérer les niveaux
+        $levels = Level::all();
+
+        $levelList = [];
+
+        // HOME 6.1.3 - permet de recuperer directement tous les users afin de simuler la jointure
+        foreach($levels as $level){
+            $levelList[$level->id] = $level->name;
+        }
+
+
+        return view('quiz.show', [
+            'currentQuiz' => $currentQuiz,
+            'questions' => $questions,
+            'author' => $author, // QUIZ 6.2.6
+            'questionAnswerList' => $questionAnswerList, // QUIZ 6.2.8
+            'levelList' => $levelList, // QUIZ 6.2.9
         ]);
     }
 
-    public function tags(){
-        
+    // QUIZZ 6.2.8 - Retourner et rendre aleatoire l'affichage des réponses
+    public function getRandomizedAnswers($questions){
+
+        $questionAnswerList = [];
+
+        foreach($questions as $question){
+
+            //On execute la requete pour chaque tour de boucle 
+            //Note: optimisation si requete + jointure
+
+            /*
+            shuffle fonction utile de l'objet Illuminate\Database\Eloquent\Collection retourné  par Eloquent : https://laravel.com/docs/5.7/collections#method-shuffle
+            */
+            $answers = Answer::where('questions_id', '=', $question->id)->get()->shuffle();
+
+            //on attribue les reponses melangée pour chaque id
+            $questionAnswerList[$question->id]= $answers;
+        }
+
+        return $questionAnswerList;
     }
+
+/*     public function tags(){
+        
+    } */
 
     public function listByTag(){
 
-    } */
+        return view('quiz.list', []);
+
+    }
 }
